@@ -21,7 +21,6 @@ int main() {
     idkanymore.push_back({a, b, c});
     idkanymore.push_back({a, b, c});
     idkanymore.push_back({a, b, c});
-    idkanymore.push_back({a, b, c});
 
     for(int i = 0; i < idkanymore.size(); i++){
         cout << idkanymore[i].x << ", " << idkanymore[i].y
