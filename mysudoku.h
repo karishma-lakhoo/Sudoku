@@ -9,16 +9,19 @@
 
 using namespace std;
 
-class Item{
-public:
-    int rowCoordinate;
-    int colCoordinate;
-    int numberValue;
-};
+//class Item{
+//public:
+//    int rowCoordinate;
+//    int colCoordinate;
+//    int numberValue;
+//};
 
 struct Test
 {
-    int x, y, z;
+    int rowCoordinate;
+    int colCoordinate;
+    int numberValue;
+
 };
 
 

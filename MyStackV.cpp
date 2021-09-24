@@ -9,7 +9,7 @@
 
 using namespace std;
 
-//i wasnt coming right with the stacks function so i made my own stack
+//i wasn't coming right with the stacks function so i made my own stack
 void MyStackV::push(int x,int y,int z)
 {
     data.push_back({x, y, z});
