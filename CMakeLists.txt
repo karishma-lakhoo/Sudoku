@@ -9,3 +9,5 @@ add_executable(9x9_sudoku_solver 9x9_sudoku_solver.cpp MyStackV.cpp)
 
 add_executable(MyStackV MyStackV.cpp)
 add_executable(safekeeping safekeeping.cpp)
+
+add_executable(rayhaan_help rayhaan_help.cpp)
