@@ -9,12 +9,6 @@
 
 using namespace std;
 
-//class Item{
-//public:
-//    int rowCoordinate;
-//    int colCoordinate;
-//    int numberValue;
-//};
 
 struct Test
 {
@@ -39,11 +33,6 @@ public:
 protected:
     std::vector<Test> data;
 };
-
-
-
-
-
 
 
 

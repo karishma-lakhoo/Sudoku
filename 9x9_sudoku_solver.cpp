@@ -1,13 +1,10 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <array>
 #include <stack>
 #include <cmath>
-#include <math.h>
-#include "mysudoku.h"
 #include <unordered_set>
-//#include "9x9_sudoku_solver.h"
+
 
 //this is to define the size od the 2D matrix (N*N) which is 9
 #define N 9
@@ -17,98 +14,64 @@
 #define COLUMNS 9
 #define EMPTY 0
 
-
-
 using namespace std;
 
+struct Test
+{
+    int rowCoordinate;
+    int colCoordinate;
+    int numberValue;
 
-vector<vector<int>> ArrayToVectorTemp(int inputArray[ROWS][COLUMNS]){
-    vector<vector<int>> inputVector(N, vector<int> (N, 0));
-    inputVector[0][0] = 0 ;
-    inputVector[1][0] = 0 ;
-    inputVector[2][0] = 0 ;
-    inputVector[3][0] = 0 ;
-    inputVector[4][0] = 0 ;
-    inputVector[5][0] = 0 ;
-    inputVector[6][0] = 3 ;
-    inputVector[7][0] = 5 ;
-    inputVector[8][0] = 9 ;
-    inputVector[0][1] = 4 ;
-    inputVector[1][1] = 0 ;
-    inputVector[2][1] = 0 ;
-    inputVector[3][1] = 8 ;
-    inputVector[4][1] = 5 ;
-    inputVector[5][1] = 1 ;
-    inputVector[6][1] = 0 ;
-    inputVector[7][1] = 7 ;
-    inputVector[8][1] = 2 ;
-    inputVector[0][2] = 0 ;
-    inputVector[1][2] = 2 ;
-    inputVector[2][2] = 6 ;
-    inputVector[3][2] = 0 ;
-    inputVector[4][2] = 0 ;
-    inputVector[5][2] = 9 ;
-    inputVector[6][2] = 0 ;
-    inputVector[7][2] = 0 ;
-    inputVector[8][2] = 8 ;
-    inputVector[0][3] = 0 ;
-    inputVector[1][3] = 0 ;
-    inputVector[2][3] = 0 ;
-    inputVector[3][3] = 0 ;
-    inputVector[4][3] = 0 ;
-    inputVector[5][3] = 0 ;
-    inputVector[6][3] = 4 ;
-    inputVector[7][3] = 1 ;
-    inputVector[8][3] = 0 ;
-    inputVector[0][4] = 0 ;
-    inputVector[1][4] = 0 ;
-    inputVector[2][4] = 0 ;
-    inputVector[3][4] = 7 ;
-    inputVector[4][4] = 9 ;
-    inputVector[5][4] = 6 ;
-    inputVector[6][4] = 0 ;
-    inputVector[7][4] = 0 ;
-    inputVector[8][4] = 0 ;
-    inputVector[0][5] = 0 ;
-    inputVector[1][5] = 8 ;
-    inputVector[2][5] = 5 ;
-    inputVector[3][5] = 0 ;
-    inputVector[4][5] = 0 ;
-    inputVector[5][5] = 0 ;
-    inputVector[6][5] = 0 ;
-    inputVector[7][5] = 0 ;
-    inputVector[8][5] = 0 ;
-    inputVector[0][6] = 1 ;
-    inputVector[1][6] = 0 ;
-    inputVector[2][6] = 0 ;
-    inputVector[3][6] = 9 ;
-    inputVector[4][6] = 0 ;
-    inputVector[5][6] = 0 ;
-    inputVector[6][6] = 7 ;
-    inputVector[7][6] = 2 ;
-    inputVector[8][6] = 0 ;
-    inputVector[0][7] = 7 ;
-    inputVector[1][7] = 5 ;
-    inputVector[2][7] = 0 ;
-    inputVector[3][7] = 1 ;
-    inputVector[4][7] = 3 ;
-    inputVector[5][7] = 4 ;
-    inputVector[6][7] = 0 ;
-    inputVector[7][7] = 0 ;
-    inputVector[8][7] = 6 ;
-    inputVector[0][8] = 9 ;
-    inputVector[1][8] = 4 ;
-    inputVector[2][8] = 8 ;
-    inputVector[3][8] = 0 ;
-    inputVector[4][8] = 0 ;
-    inputVector[5][8] = 0 ;
-    inputVector[6][8] = 0 ;
-    inputVector[7][8] = 0 ;
-    inputVector[8][8] = 0 ;
+};
 
 
-    return inputVector;
+class MyStackV
+{
+public:
+    void push(int x, int y, int z);
+    void pop();
+
+    Test& peek();
+
+    size_t size() const;
+    bool empty() const;
+
+protected:
+    std::vector<Test> data;
+};
+
+
+void MyStackV::push(int x,int y,int z)
+{
+    data.push_back({x, y, z});
 }
+
+void MyStackV::pop()
+{
+    data.pop_back();
+}
+
+Test &MyStackV::peek()
+{
+    return data.back();
+}
+
+size_t MyStackV::size() const
+{
+    return data.size();
+}
+
+bool MyStackV::empty() const
+{
+    if(data.empty()){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
 //function that reads in the input and converts the values stored in the rows and columns into an array
 void fillArray(int inputArray[ROWS][COLUMNS]){
     for(int i = 0; i < ROWS; i ++){
@@ -584,6 +547,7 @@ bool solve(vector<vector<int>> &inputVector){
 
         }
     }
+    return true;
 }
 
 
