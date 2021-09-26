@@ -6,10 +6,11 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <cstring>
 #include <unordered_set>
 
 
-//this is to define the size od the 2D matrix (N*N) which is 9
+//this is to define the size od the 2D matrix (N*N) which is 16
 #define N 16
 #define BLANK 0
 #define SPACE " "
@@ -93,6 +94,32 @@ int convertHexCharacterToInt(char element){
 }
 
 
+char convertIntToHexCharacter(int element){
+    char HexEquivalent;
+    if(element == 10){
+        HexEquivalent = 'A';
+    }
+    if(element == 11){
+        HexEquivalent = 'B';
+    }
+    if(element == 12){
+        HexEquivalent = 'C';
+    }
+    if(element == 13){
+        HexEquivalent = 'D';
+    }
+    if(element == 14){
+        HexEquivalent = 'E';
+    }
+    if(element == 15){
+        HexEquivalent = 'F';
+    }
+    else{
+        HexEquivalent = static_cast<char>(element);
+    }
+    return HexEquivalent;
+}
+
 
 vector<vector<int>> ArrayToVector(int inputArray[ROWS][COLUMNS]){
     vector<vector<int>> inputVector(N, vector<int> (N, 0));
@@ -114,6 +141,17 @@ vector<vector<int>> HexArrayToIntVector(char inputArray[ROWS][COLUMNS]){
     return inputVector;
 }
 
+vector<vector<char>> IntToHexVector(vector<vector<int>> &inputVector){
+    vector<vector<char>> inputCharVector(N, vector<char> (N, 0));
+    for(int i = 0; i < ROWS; ++i) {
+        for(int j = 0; j < COLUMNS; ++j) {
+            inputCharVector[i][j] = convertIntToHexCharacter(inputVector[i][j]);
+        }
+    }
+    return inputCharVector;
+}
+
+
 
 //this is to print the array out at the end
 void printArray(char Array[ROWS][COLUMNS]){
@@ -129,10 +167,33 @@ void printArray(char Array[ROWS][COLUMNS]){
 // print out the inputVector
 void printVector(vector<vector<int>> &inputVector){
     for(int i =0; i < ROWS; i++){
-        for(int j=0; j < COLUMNS; j++){
-            cout << inputVector[i][j] << " ";
+        for(int j=0; j < COLUMNS; j++) {
+            if (j != COLUMNS - 1) {
+                cout << inputVector[i][j] << " ";
+            }
+            else{
+                cout << inputVector[i][j];
+            }
         }
-        cout << endl;
+        if (i != ROWS - 1) {
+            cout << endl;
+        }
+    }
+}
+
+void printCharVector(vector<vector<char>> &inputVector){
+    for(int i =0; i < ROWS; i++){
+        for(int j=0; j < COLUMNS; j++) {
+            if (j != COLUMNS - 1) {
+                cout << inputVector[i][j] << " ";
+            }
+            else{
+                cout << inputVector[i][j];
+            }
+        }
+        if (i != ROWS - 1) {
+            cout << endl;
+        }
     }
 }
 
@@ -270,7 +331,7 @@ int RankOfCell(vector<vector<int>> &inputVector, int rowIndex, int colIndex){
 // this function has the ranks of all the unassigned values amongst zeros in a 2D array
 vector<vector<Test>> rankSudoku(vector<vector<int>> &inputVector) {
 //    here im initialising the array with zero values
-    vector<vector<Test>> rankSudokuVector(9, vector<Test>(9));
+    vector<vector<Test>> rankSudokuVector(N, vector<Test>(N));
     for (int i = 0; i < rankSudokuVector.size(); ++i) {
         for (int j = 0; j < rankSudokuVector[i].size(); ++j) {
             rankSudokuVector[i][j].numberValue = 0;
@@ -296,18 +357,6 @@ vector<vector<Test>> rankSudoku(vector<vector<int>> &inputVector) {
 // finding the lowest value rank matrix, whilst ignoring the zeros since those are the known values
 Test bestCell(vector<vector<Test>> &rankSudoku){
     Test t;
-
-//    for(int row = 0; row < N; row++){
-//        for (int col = 0; col < N; ++col) {
-//            rowMinimums[col] = rankSudoku[i][j];
-//            min.numberValue = *min_element()
-//
-//        }
-//        result
-
-//    but in the case where the rank[0][0] == 0 & then this associated number value is weird
-//    so i need to recode this
-//    int minElementIndex =
 
     if(rankSudoku[0][0].numberValue == 0){
         rankSudoku[0][0].numberValue = 10000;
@@ -443,7 +492,6 @@ vector<int> updatedCandidatesVector(vector<int> &CandidateVector, Test current){
         }
 
     }
-
     return newVector;
 }
 
@@ -556,7 +604,13 @@ bool solve(vector<vector<int>> &inputVector){
                     }
                 }
                 // end: calculate sudoku rank
+
                 currentDepth += 1;
+//                cout << endl;
+//                cout << "current Depth "<< currentDepth << endl;
+//                cout << endl;
+//                cout << "best cell row: " << bestCellChoiceRow << " ,best cell col: " << bestCellChoiceCol << \
+//                " ,candidate: " << candidatesForBestCell[0] << endl;
                 // add to stack [3,5,4]
                 mySudokuStack.push(bestCellChoiceRow, bestCellChoiceCol, candidatesForBestCell[0]);
                 inputVector = updatedInputVector(inputVector, bestCellChoiceRow, bestCellChoiceCol,\
@@ -580,15 +634,15 @@ int main(){
     char inputArray[N][N];
 
     fillArray(inputArray);
-    printArray(inputArray);
-    cout << endl;
-    cout << endl;
+//    printArray(inputArray);
     vector<vector<int>> intInputVector(N, vector<int> (N, 0));
     intInputVector = HexArrayToIntVector(inputArray);
-    printVector(intInputVector);
-
+//    printVector(intInputVector);
+    vector<vector<char>> charOutputVect;
     if(solve(intInputVector)) {
-        printVector(intInputVector);
+//        cout << "yay!" << endl;
+        charOutputVect = IntToHexVector(intInputVector);
+        printCharVector(charOutputVect);
     }
     else {
         cout << "No Solution" << endl;
