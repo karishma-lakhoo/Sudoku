@@ -311,6 +311,23 @@ vector<vector<Test>> rankSudoku(vector<vector<int>> &inputVector) {
 // finding the lowest value rank matrix, whilst ignoring the zeros since those are the known values
 Test bestCell(vector<vector<Test>> &rankSudoku){
     Test t;
+
+//    for(int row = 0; row < N; row++){
+//        for (int col = 0; col < N; ++col) {
+//            rowMinimums[col] = rankSudoku[i][j];
+//            min.numberValue = *min_element()
+//
+//        }
+//        result
+
+//    but in the case where the rank[0][0] == 0 & then this associated number value is weird
+//    so i need to recode this
+//    int minElementIndex =
+
+    if(rankSudoku[0][0].numberValue == 0){
+        rankSudoku[0][0].numberValue = 10000;
+    }
+
     t.numberValue = rankSudoku[0][0].numberValue;
 
     for(int i = 0; i < N; ++i) {
@@ -478,7 +495,10 @@ bool solve(vector<vector<int>> &inputVector){
             }
         }
         int currentDepth = 0;
-        while (currentDepth < numberOfEmptyCells && currentDepth >= 0){
+        while (currentDepth < numberOfEmptyCells){
+            mySudokuRank = rankSudoku(inputVector);
+
+
 //        while (currentDepth < 20){
             // code that is used to move up the stack
 
@@ -504,7 +524,9 @@ bool solve(vector<vector<int>> &inputVector){
             // find the candidates
             // eg [4,5,6]
 //            initialising the vector of candidates for the best cell
-
+            if (currentDepth == 14) {
+                cout << "kek " << endl;
+            }
 
             // if there are no candidates (made a mess)
             if(candidatesForBestCell.empty()){
@@ -526,11 +548,16 @@ bool solve(vector<vector<int>> &inputVector){
                 inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
 
                 candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
+//                candidatesForCurrentCell = up
                 cout << "candidates" << endl;
                 for (int i = 0; i < candidatesForCurrentCell.size(); ++i) {
                     cout << candidatesForCurrentCell[i] << " ";
                 }
                 cout << endl;
+                if (candidatesForCurrentCell.size() > 0) {
+                    candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
+                }
+
                 while(candidatesForCurrentCell.size() <= 1){
                     cout << "____________________" << endl;
                     cout << " Went back - " << "current depth " <<currentDepth << endl;
@@ -555,17 +582,14 @@ bool solve(vector<vector<int>> &inputVector){
                     }
                 }
 
-                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
 
                 mySudokuStack.push(currentCellChoiceRow, currentCellChoiceCol, candidatesForCurrentCell[0]);
                 cout << "Added to sad stack r:" << currentCellChoiceRow << " c:" << currentCellChoiceCol \
                 << " val:" << candidatesForCurrentCell[0] << endl;
-                currentDepth +=1;
+//                currentDepth +=1;
 
                 inputVector = updatedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol,\
                 candidatesForCurrentCell.front());
-
-
 
                 mySudokuRank = rankSudoku(inputVector);
                 for(int i= 0; i< N; i++){
@@ -595,6 +619,16 @@ bool solve(vector<vector<int>> &inputVector){
                 mySudokuStack.push(bestCellChoiceRow, bestCellChoiceCol, candidatesForBestCell[0]);
                 cout << "Added to stack r:" << bestCellChoiceRow << " c:" << bestCellChoiceCol \
                 << " val:" << candidatesForBestCell[0] << endl;
+                inputVector = updatedInputVector(inputVector, bestCellChoiceRow, bestCellChoiceCol,\
+                candidatesForBestCell[0]);
+                mySudokuRank = rankSudoku(inputVector);
+                for(int i= 0; i< N; i++){
+                    for(int j = 0; j < N; j++){
+                        mySudokuIntRank[i][j] = mySudokuRank[i][j].numberValue;
+                    }
+                }
+                cout << endl;
+                printVector(mySudokuIntRank);
             }
             if(mySudokuStack.empty()){
                 return false;
