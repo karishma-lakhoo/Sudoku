@@ -6,7 +6,7 @@
 #include <iostream>
 #include "catch.hpp"
 #include "mysudoku.h"
-#include "9x9_sudoku_solver.h"
+#include "sub01.h"
 
 
 

@@ -3,15 +3,18 @@
 #include <vector>
 #include <stack>
 #include <cmath>
+#include <sstream>
+#include <string>
+#include <iomanip>
 #include <unordered_set>
 
 
 //this is to define the size od the 2D matrix (N*N) which is 9
-#define N 9
+#define N 16
 #define BLANK 0
 #define SPACE " "
-#define ROWS 9
-#define COLUMNS 9
+#define ROWS 16
+#define COLUMNS 16
 #define EMPTY 0
 
 using namespace std;
@@ -73,13 +76,23 @@ bool MyStackV::empty() const
 
 
 //function that reads in the input and converts the values stored in the rows and columns into an array
-void fillArray(int inputArray[ROWS][COLUMNS]){
+void fillArray(char inputArray[ROWS][COLUMNS]){
     for(int i = 0; i < ROWS; i ++){
         for(int j = 0 ; j < COLUMNS; j++){
             cin >> inputArray[i][j];
         }
     }
 }
+
+int convertHexCharacterToInt(char element){
+    int integerEquivalent;
+    stringstream ss;
+    ss << std::hex << element;
+    ss >> integerEquivalent;
+    return integerEquivalent;
+}
+
+
 
 vector<vector<int>> ArrayToVector(int inputArray[ROWS][COLUMNS]){
     vector<vector<int>> inputVector(N, vector<int> (N, 0));
@@ -91,8 +104,19 @@ vector<vector<int>> ArrayToVector(int inputArray[ROWS][COLUMNS]){
     return inputVector;
 }
 
+vector<vector<int>> HexArrayToIntVector(char inputArray[ROWS][COLUMNS]){
+    vector<vector<int>> inputVector(N, vector<int> (N, 0));
+    for(int i = 0; i < ROWS; ++i) {
+        for(int j = 0; j < COLUMNS; ++j) {
+            inputVector[i][j] = convertHexCharacterToInt(inputArray[i][j]);
+        }
+    }
+    return inputVector;
+}
+
+
 //this is to print the array out at the end
-void printArray(int Array[ROWS][COLUMNS]){
+void printArray(char Array[ROWS][COLUMNS]){
     for(int i =0; i < ROWS; i++){
         for(int j=0; j < COLUMNS; j++){
             cout << Array[i][j] << " ";
@@ -553,17 +577,21 @@ bool solve(vector<vector<int>> &inputVector){
 
 
 int main(){
-    int inputArray[ROWS][COLUMNS];
-    fillArray(inputArray);
-    vector<vector<int>> inputVector(N, vector<int>(N, 0));
-    inputVector = ArrayToVector(inputArray);
+    char inputArray[N][N];
 
-    if(solve(inputVector)) {
-        printVector(inputVector);
+    fillArray(inputArray);
+    printArray(inputArray);
+    cout << endl;
+    cout << endl;
+    vector<vector<int>> intInputVector(N, vector<int> (N, 0));
+    intInputVector = HexArrayToIntVector(inputArray);
+    printVector(intInputVector);
+
+    if(solve(intInputVector)) {
+        printVector(intInputVector);
     }
     else {
         cout << "No Solution" << endl;
     }
-
     return 0;
 }
