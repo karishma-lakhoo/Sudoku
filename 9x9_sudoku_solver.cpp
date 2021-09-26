@@ -503,17 +503,10 @@ bool solve(vector<vector<int>> &inputVector){
             //  its breaking here because it returns an out of bounds row coordinate - so in that case, im setting the candidate mattrix to none
             candidatesForBestCell = candidateInCell(inputVector, bestCellChoiceRow, bestCellChoiceCol);
 
-            cout << "bestcell r " << bestCellChoiceRow << " c " << bestCellChoiceCol << " cand ";
-            for (int i=0; i<candidatesForBestCell.size(); i++){
-                cout << candidatesForBestCell[i] << " ";
-            }
-            cout << "" << endl;
-
 //          initialising the vector of candidates for the best cell
 
             // if there are no candidates (made a mess)
             if(candidatesForBestCell.empty()){
-                cout << "not happy at all" << endl;
                 if(mySudokuStack.empty()){
                     return false;
                 }
@@ -527,30 +520,21 @@ bool solve(vector<vector<int>> &inputVector){
                 currentCellChoiceRow = current.rowCoordinate;
                 currentCellChoiceCol = current.colCoordinate;
                 mySudokuStack.pop();
-                cout << "popped off the stack since the candidate vector was empty" << endl;
                 inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
 
                 candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
-//                candidatesForCurrentCell = up
-                cout << "candidates" << endl;
-                for (int i = 0; i < candidatesForCurrentCell.size(); ++i) {
-                    cout << candidatesForCurrentCell[i] << " ";
-                }
-                cout << endl;
+
                 if (candidatesForCurrentCell.size() > 0) {
                     candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
                 }
 
                 while(candidatesForCurrentCell.size() < 1){
-                    cout << "____________________" << endl;
-                    cout << " Went back - " << "current depth " <<currentDepth << endl;
                     topOfStack1 = &mySudokuStack.peek();
                     current.rowCoordinate = topOfStack1->rowCoordinate;
                     current.colCoordinate = topOfStack1->colCoordinate;
                     current.numberValue = topOfStack1->numberValue;
                     currentCellChoiceRow = current.rowCoordinate;
                     currentCellChoiceCol = current.colCoordinate;
-                    cout << "row " << currentCellChoiceRow << " " << "col" << " " << currentCellChoiceCol << " " << current.numberValue << endl;
                     mySudokuStack.pop();
                     if(mySudokuStack.empty()){
                         return false;
@@ -560,32 +544,21 @@ bool solve(vector<vector<int>> &inputVector){
                     candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
                     candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
                     if(candidatesForCurrentCell.size() >= 1){
-                        cout << "elp" << endl;
-                        for (int i = 0; i < candidatesForCurrentCell.size(); ++i) {
-                            cout << candidatesForCurrentCell[i] << endl;
-                        }
                         break;
                     }
                 }
 
 
                 mySudokuStack.push(currentCellChoiceRow, currentCellChoiceCol, candidatesForCurrentCell[0]);
-                cout << "Added to sad stack r:" << currentCellChoiceRow << " c:" << currentCellChoiceCol \
-                << " val:" << candidatesForCurrentCell[0] << endl;
-//                currentDepth +=1;
 
                 inputVector = updatedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol,\
                 candidatesForCurrentCell.front());
 
                 mySudokuRank = rankSudoku(inputVector);
 
-//                inputVector[currentCellChoiceRow][currentCellChoiceCol] = candidatesForCurrentCell[0];
-//                mySudokuStack.push(currentCellChoiceRow, currentCellChoiceCol, candidatesForCurrentCell[0]);
-                // increment currentDepth
             }
             else{
-                // (happy path) :)
-                // set the value in the main array of 4
+
                 inputVector = updatedInputVector(inputVector, bestCellChoiceRow,\
                 bestCellChoiceCol, candidatesForBestCell[0]);
                 // start: calculate sudoku rank
@@ -599,174 +572,29 @@ bool solve(vector<vector<int>> &inputVector){
                 currentDepth += 1;
                 // add to stack [3,5,4]
                 mySudokuStack.push(bestCellChoiceRow, bestCellChoiceCol, candidatesForBestCell[0]);
-                cout << "Added to stack r:" << bestCellChoiceRow << " c:" << bestCellChoiceCol \
-                << " val:" << candidatesForBestCell[0] << endl;
                 inputVector = updatedInputVector(inputVector, bestCellChoiceRow, bestCellChoiceCol,\
                 candidatesForBestCell[0]);
 
                 mySudokuRank = rankSudoku(inputVector);
-//                cout << endl;
-//                printVector(mySudokuIntRank);
+
             }
             if(mySudokuStack.empty()){
                 return false;
             }
-            cout << "Counter: " << currentDepth << endl;
-            cout << endl;
 
         }
     }
-
-
-//        i need to do a case where i update the number of empty cells
-
-
 }
 
-
-
-// now use the indicies of the lowest value and allocate it a value
-
-// Add this value to the stack
-
-
-// you can just re calc the rank array instead of updating it
-
-
-
-
-//    this value needs to be safe in the row col and specified block, if its not, then pop from the stack
-
-//      to make sure that the value is safe, we need to make sure the number is not in the row, col or block
-
-//          you need to make a case for a no solution sudoku - the rank matrix is equal to zero
-
-
-//  once all the values are complete
-
-
-// check if the fixed cells are valid in the grid
-
-
-
-// output the complete sudoku
-
-
-
-
-
-
-
-
-
-
-
-//remember to code for a no solution case
 
 
 int main(){
     int inputArray[ROWS][COLUMNS];
     fillArray(inputArray);
-//    printArray(inputArray);
-
     vector<vector<int>> inputVector(N, vector<int>(N, 0));
-    //inputVector = ArrayToVector(inputArray);
     inputVector = ArrayToVector(inputArray);
-   // inputVector = ArrayToVectorTemp(inputArray);
 
-//    cout << "testing input vector" << endl;
-//    printVector(inputVector);
-//    cout << endl;
-//    cout << endl;
-//    cout << endl;
-
-
-//    cout << "row, col 8 and block" << endl;
-//    cout << numberOfUnknownsInRow(inputVector, 8) << endl;
-//    cout << numberOfUnknownsInCol(inputVector, 8) << endl;
-//    cout << "block 9" << endl;
-//    cout << numberOfUnknownsInBlock(inputVector, 7, 7) << endl;
-
-//    cout << endl;
-//    cout << "\this is just to test the empty cells location funciton" << endl;
-//    vector<Test> emptyCellVect;
-//    emptyCellVect = findEmptyCellsLocation(inputVector);
-//    cout << emptyCellVect.size() << endl;
-//    for(int i = 0; i < emptyCellVect.size(); i++){
-//        cout << emptyCellVect[i].numberValue << " " << emptyCellVect[i].rowCoordinate << " " << emptyCellVect[i].colCoordinate << endl;
-//    }
-//    cout << endl;
-//    cout << endl;
-//    cout << endl;
-    vector<int> CandidateRVector;
-    vector<int> CandidateCVector;
-    vector<int> CandidateBVector;
-    vector<int> CandidateCellVector;
-  //  cout << "row candidates in row 2 - index 1" << endl;
-    CandidateRVector = candidateInRow(inputVector, 1);
-//    for(int i = 0; i < CandidateRVector.size(); ++i) {
-//        cout << CandidateRVector[i] << " ";
-//    }
-//    cout << endl;
-
- //   cout << "col candidates in col 7 - index 6" << endl;
-//    CandidateCVector = candidateInCol(inputVector, 6);
-//    for(int i = 0; i < CandidateCVector.size(); ++i) {
-//        cout << CandidateCVector[i] << " ";
-//    }
-//    cout << endl;
-
-//    cout << "block candidates in block 3" << endl;
-//    CandidateBVector = candidateInBlock(inputVector, 1, 6);
-//    for(int i = 0; i < CandidateBVector.size(); ++i) {
-//        cout << CandidateBVector[i] << " ";
-//    }
-//    cout << endl;
-//    cout << "candidates in cell [1][6]" << endl;
-//    CandidateCellVector = candidateInCell(inputVector, 1, 6);
-//    for(int i = 0; i < CandidateCellVector.size(); ++i) {
-//        cout << CandidateCellVector[i] << " ";
-//    }
-//    cout << endl;
-//    cout << "-------------" << endl;
-//    cout << "checking pop_front" << endl;
-//    vector<int> popCandidateVect;
-//    popCandidateVect = popFrontIntVector(CandidateCellVector);
-//    for(int i = 0; i< popCandidateVect.size(); i++){
-//        cout << popCandidateVect[i] << endl;
-//    }
-//    cout << endl;
-//    cout << "-------------" << endl;
-//    cout << endl;
-//    cout << endl;
-//    cout << endl;
-//    cout << "this is printing the rank 2D Array" << endl;
-//    cout << "asdf" << endl;
-//    vector<vector<Test>> mySudokuRank (9,vector<Test>(9));
-//    mySudokuRank = rankSudoku(inputVector);
-//
-//    for(int i = 0; i < mySudokuRank.size(); ++i) {
-//        for(int j = 0; j < mySudokuRank[i].size(); ++j) {
-//            cout << mySudokuRank[i][j].numberValue << " ";
-//        }
-//        cout << endl;
-//    }
-//    cout << endl;
-//    cout << "________________________" << endl;
-//    cout << endl;
-//    cout << "location of best cell and associated value" << endl;
-//    Test bestCellAndValue;
-//    bestCellAndValue = bestCell(mySudokuRank);
-//    cout << bestCellAndValue.rowCoordinate << " " << bestCellAndValue.colCoordinate << " " << \
-//    bestCellAndValue.numberValue << endl;
-//
-//    cout << "________________________" << endl;
-//    cout << endl;
-//    cout << endl;
-//    cout << endl;
-    cout << "testing the solve function" << endl;
     if(solve(inputVector)) {
-        cout << "yay!" << endl;
         printVector(inputVector);
     }
     else {
