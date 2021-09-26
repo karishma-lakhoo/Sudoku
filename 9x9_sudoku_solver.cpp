@@ -328,8 +328,8 @@ vector<T> popFrontIntVector(vector<T>& vec)    {
 }
 
 vector<vector<int>> updatedInputVector(vector<vector<int>> &inputVector, int RowIndex, int ColIndex, int value){
-        inputVector[RowIndex][ColIndex] = value;
-        return inputVector;
+    inputVector[RowIndex][ColIndex] = value;
+    return inputVector;
 }
 
 vector<vector<int>> erasedInputVector(vector<vector<int>> &inputVector, int RowIndex, int ColIndex){
@@ -337,21 +337,23 @@ vector<vector<int>> erasedInputVector(vector<vector<int>> &inputVector, int RowI
     return inputVector;
 }
 
-vector<int> updatedCandidatesVector(vector<int> &CandidateVector){
+vector<int> updatedCandidatesVector(vector<int> &CandidateVector, Test current){
+
+    vector<int> newVector ;
+
     if(CandidateVector.empty()){
         return CandidateVector;
     }
     else{
-        popFrontIntVector(CandidateVector);
+        for(int i = 0; i < CandidateVector.size()-2; i ++){
+            if(CandidateVector[i] > current.numberValue){
+                newVector.push_back(CandidateVector[i]);
+            }
+        }
+
     }
-//    for(int i = 0; i < CandidateVector.size(); i ++){
-//        if(CandidateVector[i] > currentSelection.numberValue){
-//            CandidateVector[i] = CandidateVector[i+1];
-//            CandidateVector.pop_back();
-//            break;
-//        }
-//    }
-    return CandidateVector;
+
+    return newVector;
 }
 
 
@@ -378,9 +380,9 @@ bool solve(vector<vector<int>> &inputVector){
             }
         }
         int currentDepth = 0;
-         while (currentDepth < numberOfEmptyCells){
+        while (currentDepth < numberOfEmptyCells){
 //        while (currentDepth < 40){
-           // code that is used to move up the stack
+            // code that is used to move up the stack
 
 
             // find the next best location (i didnt update the rank)
@@ -394,7 +396,7 @@ bool solve(vector<vector<int>> &inputVector){
             //            its breaking here because it returns an out of bounds row coordinate - so in that case, im setting the candidate mattrix to none
             if(bestCellChoiceRow < N || bestCellChoiceCol < N){
 //          continue as usual
-                 candidatesForBestCell = candidateInCell(inputVector, bestCellChoiceRow, bestCellChoiceCol);
+                candidatesForBestCell = candidateInCell(inputVector, bestCellChoiceRow, bestCellChoiceCol);
             }
 
 
@@ -437,7 +439,7 @@ bool solve(vector<vector<int>> &inputVector){
                     currentDepth -=1;
                     inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
                     vector<int> candidatesForCurrent1Cell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
-                    candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
+                    candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
                 }
 
 //                mySudokuStack.pop();
@@ -479,7 +481,7 @@ bool solve(vector<vector<int>> &inputVector){
 //                    candidatesForCurrentCell[i] = popCandidatesForCurrentCell[i];
 //                }
 //                its not updating the input array by reference
-                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
+                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
                 inputVector = updatedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol,\
                 candidatesForCurrentCell.front());
                 mySudokuRank = rankSudoku(inputVector);
