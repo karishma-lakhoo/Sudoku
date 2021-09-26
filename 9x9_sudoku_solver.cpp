@@ -499,10 +499,10 @@ bool solve(vector<vector<int>> &inputVector){
                     currentCellChoiceRow = current.rowCoordinate;
                     currentCellChoiceCol = current.colCoordinate;
                     mySudokuStack.pop();
-                    if(mySudokuStack.empty()){
+                    currentDepth -=1;
+                    if(currentDepth == 0 && candidatesForCurrentCell.empty()){
                         return false;
                     }
-                    currentDepth -=1;
                     inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
                     candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
                     candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell, current);
