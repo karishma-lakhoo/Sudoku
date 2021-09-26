@@ -338,7 +338,12 @@ vector<vector<int>> erasedInputVector(vector<vector<int>> &inputVector, int RowI
 }
 
 vector<int> updatedCandidatesVector(vector<int> &CandidateVector){
-    popFrontIntVector(CandidateVector);
+    if(CandidateVector.empty()){
+        return CandidateVector;
+    }
+    else{
+        popFrontIntVector(CandidateVector);
+    }
 //    for(int i = 0; i < CandidateVector.size(); i ++){
 //        if(CandidateVector[i] > currentSelection.numberValue){
 //            CandidateVector[i] = CandidateVector[i+1];
@@ -413,22 +418,54 @@ bool solve(vector<vector<int>> &inputVector){
                 current.rowCoordinate = topOfStack->rowCoordinate;
                 current.colCoordinate = topOfStack->colCoordinate;
                 current.numberValue = topOfStack->numberValue;
-                mySudokuStack.pop();
-                currentDepth -= 1;
-//                once i popped off the stack, i need to remove that number from the input vector
-                inputVector = erasedInputVector(inputVector, current.rowCoordinate, current.colCoordinate);
-                // look for all candidates for it [4,5,6], where the candidate is not the value from peek which is 4 hence \
-                // we use the next value which is 5 and add it to the stack after pop front
-                Test currentCellChoice = bestCell(mySudokuRank);
                 int currentCellChoiceRow = current.rowCoordinate;
                 int currentCellChoiceCol = current.colCoordinate;
+                mySudokuStack.pop();
+                currentDepth-= 1;
+                inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
+
                 vector<int> candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
-//                if candidates for current cell is none, it needs to go to the front of this if statement
-                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
-                if(candidatesForCurrentCell.empty()){
-//                    but this goes straight to the while loop
-                    continue;
+                while(candidatesForCurrentCell.empty() || candidatesForCurrentCell.size() == 1){
+                    Test* topOfStack1;
+                    topOfStack1 = &mySudokuStack.peek();
+                    current.rowCoordinate = topOfStack1->rowCoordinate;
+                    current.colCoordinate = topOfStack1->colCoordinate;
+                    current.numberValue = topOfStack1->numberValue;
+                    currentCellChoiceRow = current.rowCoordinate;
+                    currentCellChoiceCol = current.colCoordinate;
+                    mySudokuStack.pop();
+                    currentDepth -=1;
+                    inputVector = erasedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol);
+                    vector<int> candidatesForCurrent1Cell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
+                    candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
                 }
+
+//                mySudokuStack.pop();
+//                currentDepth -= 1;
+//                once i popped off the stack, i need to remove that number from the input vector
+//                inputVector = erasedInputVector(inputVector, current.rowCoordinate, current.colCoordinate);
+                // look for all candidates for it [4,5,6], where the candidate is not the value from peek which is 4 hence \
+                // we use the next value which is 5 and add it to the stack after pop front
+//                Test currentCellChoice = bestCell(mySudokuRank);
+//                int currentCellChoiceRow = current.rowCoordinate;
+//                int currentCellChoiceCol = current.colCoordinate;
+//                vector<int> candidatesForCurrentCell = candidateInCell(inputVector, currentCellChoiceRow, currentCellChoiceCol);
+//                if candidates for current cell is none, it needs to go to the front of this if statement
+//                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
+//                while(candidatesForCurrentCell.empty()){
+////                    so when there is no candidates left in this then i need to pop off the stack again...
+//                    mySudokuStack.pop();
+//                    currentDepth -= 1;
+//                    Test* topOfStack1;
+//                    topOfStack1 = &mySudokuStack.peek();
+//                    current.rowCoordinate = topOfStack1->rowCoordinate;
+//                    current.colCoordinate = topOfStack1->colCoordinate;
+//                    current.numberValue = topOfStack1->numberValue;
+//                    int currentCellChoiceRow1 = current.rowCoordinate;
+//                    int currentCellChoiceCol1 = current.colCoordinate;
+//                    vector<int> candidatesForCurrentCell1 = candidateInCell(inputVector, currentCellChoiceRow1, currentCellChoiceCol1);
+//                    candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell1);
+//                }
 //                for(int i = 0; i < candidatesForCurrentCell.size(); i ++){
 //                    if(candidatesForCurrentCell[i] > current.numberValue){
 //                        candidatesForCurrentCell[i] = candidatesForCurrentCell[i+1];
@@ -442,6 +479,7 @@ bool solve(vector<vector<int>> &inputVector){
 //                    candidatesForCurrentCell[i] = popCandidatesForCurrentCell[i];
 //                }
 //                its not updating the input array by reference
+                candidatesForCurrentCell = updatedCandidatesVector(candidatesForCurrentCell);
                 inputVector = updatedInputVector(inputVector, currentCellChoiceRow, currentCellChoiceCol,\
                 candidatesForCurrentCell.front());
                 mySudokuRank = rankSudoku(inputVector);
@@ -471,6 +509,9 @@ bool solve(vector<vector<int>> &inputVector){
                 currentDepth += 1;
                 // add to stack [3,5,4]
                 mySudokuStack.push(bestCellChoiceRow, bestCellChoiceCol, candidatesForBestCell[0]);
+            }
+            if(mySudokuStack.empty()){
+                return false;
             }
             cout << mySudokuStack.peek().rowCoordinate << " " << mySudokuStack.peek().colCoordinate << " " << mySudokuStack.peek().numberValue << endl;
             cout << endl;
