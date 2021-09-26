@@ -594,6 +594,7 @@ int main(){
     cout << "-------------" << endl;
     cout << endl;
     cout << endl;
+    cout << endl;
     cout << "this is printing the rank 2D Array" << endl;
     cout << "asdf" << endl;
     vector<vector<Test>> mySudokuRank (9,vector<Test>(9));
