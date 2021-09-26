@@ -405,7 +405,7 @@ bool solve(vector<vector<int>> &inputVector){
 
 
             // if there are no candidates (made a mess)
-            if(candidatesForBestCell.empty() || bestCellChoiceRow > N || bestCellChoiceCol > N){
+            if(candidatesForBestCell.empty()){
                 if(mySudokuStack.empty()){
                     return false;
                 }
