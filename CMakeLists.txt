@@ -13,3 +13,4 @@ add_executable(safekeeping safekeeping.cpp)
 
 
 add_executable(16x16_sudoku_solver 16x16_sudoku_solver.cpp)
+add_executable(25x25_sudoku_solver 25x25_sudoku_solver.cpp)

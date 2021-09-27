@@ -8,8 +8,6 @@
 
 //this is to define the size od the 2D matrix (N*N) which is 9
 #define N 9
-#define BLANK 0
-#define SPACE " "
 #define ROWS 9
 #define COLUMNS 9
 #define EMPTY 0
@@ -254,7 +252,7 @@ int RankOfCell(vector<vector<int>> &inputVector, int rowIndex, int colIndex){
 vector<vector<Test>> rankSudoku(vector<vector<int>> &inputVector) {
 //    here im initialising the array with zero values
     vector<vector<Test>> rankSudokuVector(9, vector<Test>(9));
-    for (int i = 0; i < rankSudokuVector.size(); ++i) {
+    for(int i = 0; i < rankSudokuVector.size(); ++i) {
         for (int j = 0; j < rankSudokuVector[i].size(); ++j) {
             rankSudokuVector[i][j].numberValue = 0;
         }
@@ -278,20 +276,7 @@ vector<vector<Test>> rankSudoku(vector<vector<int>> &inputVector) {
 
 // finding the lowest value rank matrix, whilst ignoring the zeros since those are the known values
 Test bestCell(vector<vector<Test>> &rankSudoku){
-    Test t;
-
-//    for(int row = 0; row < N; row++){
-//        for (int col = 0; col < N; ++col) {
-//            rowMinimums[col] = rankSudoku[i][j];
-//            min.numberValue = *min_element()
-//
-//        }
-//        result
-
-//    but in the case where the rank[0][0] == 0 & then this associated number value is weird
-//    so i need to recode this
-//    int minElementIndex =
-
+    Test t{};
     if(rankSudoku[0][0].numberValue == 0){
         rankSudoku[0][0].numberValue = 10000;
     }
@@ -451,7 +436,7 @@ bool solve(vector<vector<int>> &inputVector){
 
 // so when the grid is not already solved, the continue to search and find values
 // this is the number of empty cells in the sudoku
-    int numberOfEmptyCells = findEmptyCellsLocation(inputVector).size();
+    size_t numberOfEmptyCells = findEmptyCellsLocation(inputVector).size();
     if(numberOfEmptyCells == 0){
         return true;
     }
